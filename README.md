@@ -3,5 +3,5 @@
 
 
 
-- JWT 인증방식 refresh token ,access token 
+- JWT 인증방식 refresh token ,accesstoken 
 
