@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:project01/common/const/colors.dart';
 import 'package:project01/common/layout/default_layout.dart';
@@ -9,6 +12,11 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dio = Dio();
+    final emulatorIp = '10.0.2.2:3000';//안드로이드 애뮬레이터의 경우 이 ip로 보내야 함
+    final simulatorIp = '127.0.0.1:3000'; //아이폰 시뮬레이터
+    final ip = Platform.isIOS ? simulatorIp : emulatorIp; //안드로이드 환경과 ios시뮬레이터 환경에서 ip값을 다르게 입력해줘야하는 변수를 막아주는 코드
+
     return DefaultLayout(
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -39,19 +47,46 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: ()async{
+                    //ID:비밀번호
+                    final rawString ='test@codefactory.ai:testtest';
+
+                    Codec<String , String> stringToBase64 = utf8.fuse(base64);
+
+                    String token = stringToBase64.encode(rawString);
+
+                    final resp  = await dio.post('http://${ip}/auth/login' ,
+                        options: Options(
+                          headers: {
+                            'authorization': 'Basic $token',
+                          },
+
+                        )
+                    );
+                    print(resp.data);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PRIMARY_COLOR,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
-        
                   child: Text('로그인', style: TextStyle(color: Colors.white)),
                 ),
-        
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () async{
+
+                    final refreshtoken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTc2Nzc4NTUxNCwiZXhwIjoxNzY3ODcxOTE0fQ.RkUwgh_nYDK1aaXJmX9TOv3M9fx79dngSxbxbq75sDs';
+
+                    final resp  = await dio.post('http://${ip}/auth/token' ,
+                        options: Options(
+                            headers: {
+                              'authorization': 'Bearer $refreshtoken',
+                            }
+                        )
+                    );
+                    print(resp.data);
+                  },
                   style: TextButton.styleFrom(foregroundColor: Colors.black),
                   child: Text('화원가입'),
                 ),
