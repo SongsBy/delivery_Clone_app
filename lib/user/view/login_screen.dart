@@ -2,17 +2,29 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:project01/common/const/colors.dart';
+import 'package:project01/common/const/data.dart';
 import 'package:project01/common/layout/default_layout.dart';
-
+import 'package:project01/common/view/root_tab.dart';
 import '../../common/const/component/custom_text_form_field.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String username = '';
+  String password = '';
+
 
   @override
   Widget build(BuildContext context) {
     final dio = Dio();
+
     final emulatorIp = '10.0.2.2:3000';//안드로이드 애뮬레이터의 경우 이 ip로 보내야 함
     final simulatorIp = '127.0.0.1:3000'; //아이폰 시뮬레이터
     final ip = Platform.isIOS ? simulatorIp : emulatorIp; //안드로이드 환경과 ios시뮬레이터 환경에서 ip값을 다르게 입력해줘야하는 변수를 막아주는 코드
@@ -37,19 +49,23 @@ class LoginScreen extends StatelessWidget {
                 ),
                 CustomTextFormField(
                   hintText: '이메일을 입력해주세요',
-                  onChanged: (String Value) {},
+                  onChanged: (String Value) {
+                    username = Value;
+                  },
                 ),
                 SizedBox(height: 16.0),
                 CustomTextFormField(
                   hintText: '비밀번호를  입력해주세요',
-                  onChanged: (String Value) {},
+                  onChanged: (String Value) {
+                    password = Value;
+                  },
                   obscureText: true,
                 ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: ()async{
                     //ID:비밀번호
-                    final rawString ='test@codefactory.ai:testtest';
+                    final rawString ='$username:$password';
 
                     Codec<String , String> stringToBase64 = utf8.fuse(base64);
 
@@ -60,10 +76,19 @@ class LoginScreen extends StatelessWidget {
                           headers: {
                             'authorization': 'Basic $token',
                           },
-
-                        )
+                        ),
                     );
-                    print(resp.data);
+
+                    final refreshToken = resp.data['refreshToken'];
+                    final accessToken = resp.data['accessToken'];
+                    
+                    await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);//refreshToken 저장
+                    await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);//accessToken 저장
+
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => RootTab())
+                    );
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PRIMARY_COLOR,
@@ -85,7 +110,6 @@ class LoginScreen extends StatelessWidget {
                             }
                         )
                     );
-                    print(resp.data);
                   },
                   style: TextButton.styleFrom(foregroundColor: Colors.black),
                   child: Text('화원가입'),
