@@ -6,7 +6,6 @@ import 'package:project01/user/view/splash_screen.dart';
 void main() {
   runApp(_App());
 }
-
 class _App extends StatelessWidget {
   const _App({super.key});
 
