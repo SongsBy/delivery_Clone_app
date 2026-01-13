@@ -46,9 +46,10 @@ class _RootTabState extends State<RootTab> {
               ),
             ]
         ),
-        child: Center(
-            child: Text(
-                'RootTab')
+        child: TabBarView(
+            children: [
+
+            ]
         )
     );
   }
