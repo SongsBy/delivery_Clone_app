@@ -19,16 +19,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String username = '';
   String password = '';
-
-
   @override
   Widget build(BuildContext context) {
     final dio = Dio();
-
-    final emulatorIp = '10.0.2.2:3000';//안드로이드 애뮬레이터의 경우 이 ip로 보내야 함
-    final simulatorIp = '127.0.0.1:3000'; //아이폰 시뮬레이터
-    final ip = Platform.isIOS ? simulatorIp : emulatorIp; //안드로이드 환경과 ios시뮬레이터 환경에서 ip값을 다르게 입력해줘야하는 변수를 막아주는 코드
-
     return DefaultLayout(
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -66,11 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: ()async{
                     //ID:비밀번호
                     final rawString ='$username:$password';
-
                     Codec<String , String> stringToBase64 = utf8.fuse(base64);
-
                     String token = stringToBase64.encode(rawString);
-
                     final resp  = await dio.post('http://${ip}/auth/login' ,
                         options: Options(
                           headers: {
@@ -78,7 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                     );
-
                     final refreshToken = resp.data['refreshToken'];
                     final accessToken = resp.data['accessToken'];
                     
@@ -88,7 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => RootTab())
                     );
-
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PRIMARY_COLOR,
@@ -100,16 +88,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 TextButton(
                   onPressed: () async{
-
-                    final refreshtoken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTc2Nzc4NTUxNCwiZXhwIjoxNzY3ODcxOTE0fQ.RkUwgh_nYDK1aaXJmX9TOv3M9fx79dngSxbxbq75sDs';
-
-                    final resp  = await dio.post('http://${ip}/auth/token' ,
-                        options: Options(
-                            headers: {
-                              'authorization': 'Bearer $refreshtoken',
-                            }
-                        )
-                    );
                   },
                   style: TextButton.styleFrom(foregroundColor: Colors.black),
                   child: Text('화원가입'),
@@ -122,10 +100,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
 class _Title extends StatelessWidget {
   const _Title({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -138,10 +114,8 @@ class _Title extends StatelessWidget {
     );
   }
 }
-
 class _SubTitle extends StatelessWidget {
   const _SubTitle({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Text(

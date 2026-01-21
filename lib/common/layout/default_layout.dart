@@ -21,6 +21,9 @@ class DefaultLayout extends StatelessWidget {
       bottomNavigationBar: bottomNavigationBar,
     );
   }
+
+
+
   AppBar ?renderAppbar(){
     if(title == null) {
        return null;

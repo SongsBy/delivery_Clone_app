@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project01/common/const/colors.dart';
+import 'package:project01/restaurant/model/restaurant_model.dart';
 
 class RestaurantCard extends StatelessWidget {
   //가게 이미지
@@ -9,24 +10,41 @@ class RestaurantCard extends StatelessWidget {
   //레스토랑 테그
   final List<String> tags;
   //평점 갯수
-  final int ratingCount;
+  final int ratingsCount;
   //배송 걸리는 시간
   final int deliveryTime;
   //배송 비용
   final int deliveryFee;
   //평균 평점
-  final double rating;
-
+  final double ratings;
   const RestaurantCard({
     required this.image,
     required this.name,
     required this.tags,
-    required this.ratingCount,
+    required this.ratingsCount,
     required this.deliveryTime,
     required this.deliveryFee,
-    required this.rating,
+    required this.ratings,
     super.key,
   });
+
+  factory RestaurantCard.fromModel({
+
+    required RestaurantModel model,
+}) {
+    return RestaurantCard(
+      image: Image.network(
+        model.thumbUrl,
+        fit: BoxFit.cover,),
+      name:  model.name,
+      tags:List<String>.from(model.tags),
+      ratingsCount: model.ratingsCount,
+      deliveryTime: model.deliveryTime,
+      deliveryFee: model.deliveryFee,
+      ratings: model.ratings,
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +67,9 @@ class RestaurantCard extends StatelessWidget {
             SizedBox(height: 8),
             Row(
               children: [
-                _IconText(icon:Icons.star, label: rating.toString()),
+                _IconText(icon:Icons.star, label: ratings.toString()),
                 renderDot(),
-                _IconText(icon: Icons.receipt,label: rating.toString()),
+                _IconText(icon: Icons.receipt,label: ratings.toString()),
                 renderDot(),
                 _IconText(icon: Icons.timelapse_outlined,label: '${deliveryTime} 분 '),
                 renderDot(),
