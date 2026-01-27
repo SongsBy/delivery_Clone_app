@@ -12,4 +12,4 @@
 - dio
 - Pagenation
 - factoryConstructor
-- Detaial Screen 
+- DetailScreeen
