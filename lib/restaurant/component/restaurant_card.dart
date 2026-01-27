@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project01/common/const/colors.dart';
+import 'package:project01/restaurant/model/restaurant_detail_model.dart';
 import 'package:project01/restaurant/model/restaurant_model.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -50,9 +51,9 @@ class RestaurantCard extends StatelessWidget {
       deliveryFee: model.deliveryFee,
       ratings: model.ratings,
       isDetial: isDetail,
+      Detial: model is RestaurantDetailModel ?  model.detail : null,
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +66,6 @@ class RestaurantCard extends StatelessWidget {
         const SizedBox(height: 16.0),
         Padding(
           padding:EdgeInsets.symmetric(horizontal: isDetial ? 16.0 : 0),
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
