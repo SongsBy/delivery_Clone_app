@@ -18,4 +18,5 @@
   - dev_dependencies:
   - build_runner: ^2.10.4
   - json_serializable: ^6.10.0
+  - retrofit
 
