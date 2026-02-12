@@ -20,5 +20,5 @@
   - json_serializable: ^6.10.0
   - pagination 구현
   - retrofit
-  - 
+  - riverpod
 
